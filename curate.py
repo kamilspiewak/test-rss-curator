@@ -1,5 +1,4 @@
 import feedparser
-from feedparser import mktime_tz
 from feedgen.feed import FeedGenerator
 from bs4 import BeautifulSoup
 from datetime import datetime, timezone
@@ -45,9 +44,9 @@ def get_entry_date(entry):
         parsed = entry.get(key)
         if parsed:
             try:
-                return datetime.fromtimestamp(mktime_tz(parsed), tz=timezone.utc)
-            except (TypeError, ValueError, OverflowError):
                 return datetime(*parsed[:6], tzinfo=timezone.utc)
+            except (TypeError, ValueError, OverflowError):
+                return None
 
     for key in ["published", "updated", "created"]:
         parsed = parse_datetime(entry.get(key))
