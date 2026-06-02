@@ -1,4 +1,56 @@
-<h1>Curated RSS</h1>
-<p>
-<a href="feed.xml">RSS Feed</a>
-</p>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>RSS Curator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+      background: #0b0f14;
+      color: #e6edf3;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #111827;
+      color: white;
+    }
+
+    .item {
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #222;
+      border-radius: 10px;
+      background: #111827;
+    }
+
+    a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+
+    .meta {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>📡 My RSS Curator</h1>
+
+  <input id="filter" placeholder="Filter posts (e.g. AI, Python, startup...)" />
+
+  <div id="feed"></div>
+
+  <script src="https://unpkg.com/rss-parser/dist/rss-parser.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
