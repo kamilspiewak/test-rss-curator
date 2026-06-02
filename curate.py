@@ -1,7 +1,8 @@
 import feedparser
+from feedparser import mktime_tz
 from feedgen.feed import FeedGenerator
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from urllib.error import HTTPError, URLError
 from urllib.parse import urljoin
@@ -24,15 +25,17 @@ def parse_datetime(value):
         return None
 
     if isinstance(value, datetime):
-        return value
+        return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
 
     try:
-        return parsedate_to_datetime(value)
+        parsed = parsedate_to_datetime(value)
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
     except (TypeError, ValueError):
         pass
 
     try:
-        return datetime.fromisoformat(value)
+        parsed = datetime.fromisoformat(value)
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=timezone.utc)
     except (TypeError, ValueError):
         return None
 
@@ -41,7 +44,10 @@ def get_entry_date(entry):
     for key in ["published_parsed", "updated_parsed", "created_parsed"]:
         parsed = entry.get(key)
         if parsed:
-            return datetime(*parsed[:6])
+            try:
+                return datetime.fromtimestamp(mktime_tz(parsed), tz=timezone.utc)
+            except (TypeError, ValueError, OverflowError):
+                return datetime(*parsed[:6], tzinfo=timezone.utc)
 
     for key in ["published", "updated", "created"]:
         parsed = parse_datetime(entry.get(key))
