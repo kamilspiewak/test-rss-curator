@@ -34,7 +34,7 @@ for item in items:
 
 fg = FeedGenerator()
 fg.title("My Curated Feed")
-fg.link(href="https://kamilspiewak97.github.io/rss-curator/")
+fg.link(href="https://kamilspiewak.github.io/rss-curator/")
 fg.description("Curated RSS feed")
 
 for item in unique[:25]:
