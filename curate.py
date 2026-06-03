@@ -81,7 +81,22 @@ def parse_blog_posts(html, base_url):
             if link and not link.startswith("http"):
                 link = base_url.rstrip("/") + "/" + link.lstrip("/")
 
-            description = article.get_text(strip=True)[:300]
+            # remove the title element so it doesn't appear in the description
+            try:
+                title_tag.decompose()
+            except Exception:
+                pass
+
+            # remove some common noisy elements that pollute the summary
+            for selector in ["script", "style", "img", "svg", ".share", ".tags"]:
+                for el in article.select(selector):
+                    try:
+                        el.decompose()
+                    except Exception:
+                        pass
+
+            # grab remaining text as description
+            description = article.get_text(" ", strip=True)[:300]
 
             posts.append({
                 "title": title,
