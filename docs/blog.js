@@ -3,7 +3,7 @@ const parser = new RSSParser();
 
 async function loadBlogFeed() {
     try {
-        const feed = await parser.parseURL("docs/blogposts.xml");
+        const feed = await parser.parseURL("blogposts.xml");
 
         blogContainer.innerHTML = "";
 
