@@ -40,6 +40,17 @@
       font-size: 12px;
       color: #9ca3af;
     }
+    .columns {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    #feed,
+    #feed_blog {
+      flex: 1;
+      min-width: 0;
+    }
   </style>
 </head>
 
@@ -48,9 +59,13 @@
 
   <input id="filter" placeholder="Filtering" />
 
+  <div class="columns">
   <div id="feed"></div>
+  <div id="feed_blog"></div>
+  </div>
 
   <script src="https://unpkg.com/rss-parser/dist/rss-parser.min.js"></script>
   <script src="app.js"></script>
+  <script src="blog.js"></script>
 </body>
 </html>
