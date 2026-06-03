@@ -4,6 +4,11 @@ from feedgen.feed import FeedGenerator
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+try:
+    from dateutil import parser as date_parser
+except Exception:
+    date_parser = None
+
 feeds = open("feeds.txt").read().splitlines()
 
 items = []
@@ -80,6 +85,24 @@ def parse_blog_posts(html, base_url):
 
             if link and not link.startswith("http"):
                 link = base_url.rstrip("/") + "/" + link.lstrip("/")
+            # attempt to extract a publish date from common places
+            pub_date = None
+            date_text = None
+            time_tag = article.find("time")
+            if time_tag:
+                date_text = time_tag.get("datetime") or time_tag.get_text(strip=True)
+            else:
+                meta = (article.find("meta", {"property": "article:published_time"}) or
+                        article.find("meta", {"name": "date"}) or
+                        article.find("meta", {"name": "pubdate"}))
+                if meta:
+                    date_text = meta.get("content") or meta.get("value")
+
+            if date_text and date_parser:
+                try:
+                    pub_date = date_parser.parse(date_text)
+                except Exception:
+                    pub_date = None
 
             # remove the title element so it doesn't appear in the description
             try:
@@ -101,7 +124,8 @@ def parse_blog_posts(html, base_url):
             posts.append({
                 "title": title,
                 "link": link,
-                "summary": description
+                "summary": description,
+                "date": pub_date
             })
 
     return posts
@@ -117,7 +141,10 @@ def collect_blog_posts():
             continue
 
         posts = parse_blog_posts(html, url)
-        all_posts.extend(posts)
+        # sort posts by date (newest first). Posts without date go to the end.
+        posts_sorted = sorted(posts, key=lambda p: p.get('date') or datetime.min, reverse=True)
+        # limit to 5 items per source
+        all_posts.extend(posts_sorted[:5])
 
     return all_posts
 
@@ -139,6 +166,11 @@ def generate_blog_rss(posts, output_file="docs/blogposts.xml"):
         fe.title(item["title"])
         fe.link(href=item["link"])
         fe.description(item["summary"])
+        if item.get("date"):
+            try:
+                fe.pubDate(item.get("date"))
+            except Exception:
+                pass
 
     fg.rss_file(output_file)
 
