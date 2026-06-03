@@ -110,7 +110,7 @@ def collect_blog_posts():
 def generate_blog_rss(posts, output_file="docs/blogposts.xml"):
     fg = FeedGenerator()
     fg.title("Blog Posts Feed")
-    fg.link(href="https://kamilspiewak.github.io/test-rss-curator/blogs")
+    fg.link(href="https://kamilspiewak.github.io/test-rss-curator/")
     fg.description("Scraped blog posts")
 
     seen = set()
