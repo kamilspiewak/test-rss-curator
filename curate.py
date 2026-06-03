@@ -70,7 +70,7 @@ def parse_blog_posts(html, base_url):
     posts = []
 
     # heurystyka: artykuły lub linki
-    for article in soup.soup.select("article, .post, .entry"):
+    for article in soup.select("article, .post, .entry"):
         title_tag = article.find(["h1", "h2", "h3"])
         link_tag = article.find("a")
 
