@@ -1,9 +1,9 @@
 const blogContainer = document.getElementById("feed_blog");
-const parser = new RSSParser();
+const blogParser = new RSSParser();
 
 async function loadBlogFeed() {
     try {
-        const feed = await parser.parseURL("blogposts.xml");
+        const feed = await blogParser.parseURL("blogposts.xml");
 
         blogContainer.innerHTML = "";
 
