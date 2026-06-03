@@ -51,6 +51,20 @@
       flex: 1;
       min-width: 0;
     }
+
+    .column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .column h2 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+      border-bottom: 1px solid #333;
+      padding-bottom: 8px;
+    }
   </style>
 </head>
 
@@ -60,12 +74,14 @@
   <input id="filter" placeholder="Filtering" />
 
   <div class="columns">
-    <div id="feed">
+    <section class="column">
       <h2>Curated Feed</h2>
-    </div>
-    <div id="feed_blog">
+      <div id="feed"></div>
+    </section>
+    <section class="column">
       <h2>Blog Posts</h2>
-    </div>
+      <div id="feed_blog"></div>
+    </section>
   </div>
 
   <script src="https://unpkg.com/rss-parser/dist/rss-parser.min.js"></script>
